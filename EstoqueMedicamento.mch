@@ -1,5 +1,6 @@
 MACHINE
     EstoqueMedicamento
+
 SETS 
     NOME
      
@@ -12,18 +13,18 @@ INVARIANT
     dia : NATURAL1
     
 INITIALISATION
- medicamento := { } || estoque := {} || dia := 1
+ medicamento := {} || estoque := {} || dia := 1
     
 OPERATIONS
 
     adicionar_medicamento(ID , nome, lote, validade) =
     PRE nome: NOME & lote: NATURAL1 & validade: NATURAL1 & ID : NATURAL & ID /: dom(medicamento)
-    THEN medicamento := medicamento \/ {ID |-> (nome |-> lote |-> validade)}; estoque := estoque \/ {ID |-> 0}
+    THEN medicamento := medicamento \/ {ID |-> (nome |-> lote |-> validade)} || estoque := estoque \/ {ID |-> 0}
     END;
 
     remover_medicamento(ID) = 
     PRE ID : NATURAL & ID : dom(medicamento)
-    THEN medicamento := medicamento - ({ID} <| medicamento); estoque := estoque -  ({ID} <| estoque)
+    THEN medicamento := medicamento - ({ID} <| medicamento) || estoque := estoque -  ({ID} <| estoque)
     END;
 
     adicionar_estoque(ID, qtd) = 
@@ -60,4 +61,3 @@ OPERATIONS
 	END
     END
 END
-
