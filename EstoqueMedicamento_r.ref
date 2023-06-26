@@ -1,5 +1,22 @@
-REFINEMENT EstoqueMedicamento_r
-REFINES EstoqueMedicamento
+REFINEMENT 
+    EstoqueMedicamento_r
+    
+REFINES 
+    EstoqueMedicamento
+    
+VARIABLES 
+    medicamento_r, medicamento_r2
+    /*, estoque_r, dia_r*/
+    
+INVARIANT
+    medicamento_r2 : NATURAL1 --> NATURAL1
+    & medicamento_r : NATURAL +-> medicamento_r2
+    /*add linking invariant and others predicates*/
+
+    
+INITIALISATION medicamento_r := {} || medicamento_r2 := {}
+    
+OPERATIONS    
 
 
 END
