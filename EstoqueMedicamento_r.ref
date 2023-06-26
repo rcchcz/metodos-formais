@@ -5,16 +5,23 @@ REFINES
     EstoqueMedicamento
     
 VARIABLES 
-    medicamento_r, medicamento_r2
-    /*, estoque_r, dia_r*/
-    
+    medicamento_nome, medicamento_lote, medicamento_validade, estoque_r, dia_r
+
 INVARIANT
-    medicamento_r2 : NATURAL1 --> NATURAL1
-    & medicamento_r : NATURAL +-> medicamento_r2
+    medicamento_nome : NAT1 +-> NOME
+  & medicamento_lote : NAT1 +-> NAT1
+  & medicamento_validade : NAT1 +-> NAT1
+  & estoque_r : NAT1 +-> NAT /*id -> qnt, qnt pode ser zero*/
+  & dia_r : NAT
+  & dia_r = dia
     /*add linking invariant and others predicates*/
 
     
-INITIALISATION medicamento_r := {} || medicamento_r2 := {}
+INITIALISATION medicamento_nome := {} 
+               || medicamento_lote := {} 
+               || medicamento_validade := {}
+               || dia_r := 0
+               || estoque_r := {}
     
 OPERATIONS    
 
