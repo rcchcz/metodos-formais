@@ -54,17 +54,14 @@ OPERATIONS
         hoje := dia
     END;
     
-    vencidos2 <-- verificar_vencidos = 
+    vv <-- verificar_vencidos = 
     BEGIN
-        /*TODO*/
-        /*verificar como preencher esse array com medicamentos cujo vv < dia*/
-        /*retornar o array contendo apenas os ids dos medicamentos vencidos*/
-        /*atualizar o marca dagua*/
-        /*finalizado isso, continuar o refinamento (lembrar dos invariantes de ligação)*/
-        ANY aa,vv WHERE aa : dom({xx}) & vv : ran(ran({xx}))
-		THEN 
-			vencidos2 := {xx | xx : dom(medicamento) & vv < dia}
-			/*orders_r(counter) := oo || counter := counter + 1*/
-	END
+        // vencidos(vv) eh a qtd de dias desde 1/1/1xxx (dia 0);
+        // isso indica qntd dias dps do dia 1/1/1xxx o medicamento vence.
+        // se a data eh contabilizada assim, 
+        // entao estar vencido = vencidos(vv) < a qtd de dias desde 1/1/1xxx ate hj.
+        // esse "0" eh onde vai vir "a qtd de dias desde 1/1/1xxx ate hj".
+        // como fazer isso?
+        vv := {xx | xx : dom(medicamento) & vencidos(vv) < 0}
     END
 END
