@@ -23,7 +23,7 @@ INITIALISATION medicamento_nome := {}
                || dia_r := 0
                || estoque_r := {}
     
-OPERATIONS    
+// OPERATIONS    
 
 
 END
