@@ -11,7 +11,7 @@ INVARIANT
     medicamento : NAT +-> NOME * NAT1 * NAT1 &
     estoque : NAT +-> NAT &
     dom(estoque) = dom(medicamento) &
-    dia : NAT & // com a nova modelagem, dia ainda eh necessario?
+    dia : NAT & 
     vencidos : NAT >-> dom(medicamento)
     
 INITIALISATION

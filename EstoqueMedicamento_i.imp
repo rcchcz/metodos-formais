@@ -1,0 +1,53 @@
+IMPLEMENTATION EstoqueMedicamento_i
+    
+REFINES EstoqueMedicamento
+    
+CONCRETE_VARIABLES 
+    medicamento_nome, medicamento_lote, medicamento_validade, estoque_r, dia_r, wm
+
+INVARIANT
+    medicamento_nome : NAT1 +-> NOME /*id -> nome*/
+    & medicamento_lote : NAT1 +-> NAT1 /*id -> lote*/
+    & medicamento_validade : NAT1 +-> NAT1 /*id -> validade*/
+    & estoque_r : NAT1 +-> NAT /*id -> qtd, qtd pode ser zero*/
+    & dom(medicamento_nome) = dom(medicamento_lote) 
+    & dom(medicamento_lote) = dom(medicamento_validade)
+    & wm : NAT /*wm = 0 qnd ta vazio*/
+    & dia_r : NAT
+    & dia_r = dia
+    /*TO DO: 
+    - ver comentarios sobre "dia" na .mch
+    - ver alteracao no verificar_vencidos na .mch
+    - ver se ainda precisa do dia e como utilizar na questao da validade
+    - talvez inicializar os array com lixo (?)
+    - add invariante de ligacao e outros predicados pra ligar a maq e o ref*/
+
+    
+INITIALISATION medicamento_nome := {} 
+               ; medicamento_lote := {} 
+               ; medicamento_validade := {}
+               ; dia_r := 0
+               ; estoque_r := {}
+               ; wm := 0
+    
+ OPERATIONS    
+     vv <-- verificar_vencidos =
+         BEGIN
+             VAR mm, len IN
+                 mm := 0;
+                 len := card(dom(medicamento_nome));
+                 WHILE mm < len DO
+                     VAR val IN
+                         val := medicamento_validade(mm);
+                         IF (val > 2) THEN
+                             vv(wm) := mm ; wm := wm + 1
+                         END
+                     END;
+                     mm := mm + 1;
+                     INVARIANT mm : NAT
+                     VARIANT (len - mm)
+                 END
+              END
+         END
+
+END
