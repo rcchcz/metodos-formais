@@ -5,20 +5,18 @@ SETS
     NOME
      
 VARIABLES
-    estoque, dia, medicamento, vencidos
+    estoque, dia, medicamento
     
 INVARIANT
     medicamento : NAT +-> NOME * NAT1 * NAT1 &
     estoque : NAT +-> NAT &
     dom(estoque) = dom(medicamento) &
-    dia : NAT & 
-    vencidos : NAT >-> dom(medicamento)
+    dia : NAT
     
 INITIALISATION
     medicamento := {} 
     || estoque := {} 
-    || dia := 1 
-    || vencidos := (0..card(medicamento))*{0}
+    || dia := 0
     
 OPERATIONS
 
@@ -61,12 +59,6 @@ OPERATIONS
         
     vv <-- verificar_vencidos = 
         BEGIN
-            // vencidos(vv) eh a qtd de dias desde 1/1/1xxx (dia 0);
-            // isso indica qntd dias dps do dia 1/1/1xxx o medicamento vence.
-            // se a data eh contabilizada assim, 
-            // entao estar vencido = vencidos(vv) < a qtd de dias desde 1/1/1xxx ate hj.
-            // esse "0" eh onde vai vir "a qtd de dias desde 1/1/1xxx ate hj".
-            // como fazer isso?
-            vv := {xx | xx : dom(medicamento) & vencidos(vv) < 0}
+            vv := {xx | xx : dom(medicamento) & #(yy) . (yy:ran(medicamento[{xx}]) & yy < dia)}
         END
 END
