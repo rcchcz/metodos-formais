@@ -19,7 +19,6 @@ INITIALISATION
     || dia := 0
     
 OPERATIONS
-
     adicionar_medicamento(ID , nome, lote, validade) =
         PRE nome: NOME & lote: NAT1 & validade: NAT1 & ID : NAT & ID /: dom(medicamento)
         THEN medicamento := medicamento \/ {ID |-> (nome |-> lote |-> validade)} 
@@ -41,7 +40,7 @@ OPERATIONS
         PRE ID: NAT & ID : dom(medicamento) & qtd : NAT1 & (estoque(ID) - qtd) >= 0 
         THEN estoque(ID) := estoque(ID) - qtd
         END;
-
+    
     qtd <-- qtd_medicamento(ID) = 
         PRE ID : dom(medicamento)
         THEN qtd := estoque(ID)
@@ -57,8 +56,9 @@ OPERATIONS
             hoje := dia
         END;
         
-    vv <-- verificar_vencidos = 
-        BEGIN
-            vv := {xx | xx : dom(medicamento) & #(yy) . (yy:ran(medicamento[{xx}]) & yy < dia)}
+    oo <-- verificar_validade(xx) = 
+        PRE xx : dom(medicamento)
+        THEN
+            oo := max({0, min(ran(medicamento[{xx}])) - dia}) 
         END
 END
