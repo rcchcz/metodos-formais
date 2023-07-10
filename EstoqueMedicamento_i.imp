@@ -1,82 +1,89 @@
 IMPLEMENTATION EstoqueMedicamento_i
-    
+
 REFINES EstoqueMedicamento
-    
-CONCRETE_VARIABLES 
-    medicamento_nome, medicamento_lote, medicamento_validade, estoque_i, dia_i, wm
+
+CONCRETE_VARIABLES
+    medicamento_nome , medicamento_lote , medicamento_validade , estoque_i , dia_i , wm
 
 INVARIANT
-    medicamento_nome : NAT1 +-> NOME /*id -> nome*/
-    & medicamento_lote : NAT1 +-> NAT1 /*id -> lote*/
-    & medicamento_validade : NAT1 +-> NAT1 /*id -> validade*/
-    & estoque_i : NAT1 +-> NAT /*id -> qtd, qtd pode ser zero*/
-    & dom(medicamento_nome) = dom(medicamento_lote) 
-    & dom(medicamento_lote) = dom(medicamento_validade)
+    medicamento_nome : NAT +-> NOME /*id -> nome*/
+    & medicamento_lote : NAT +-> NAT /*id -> lote*/
+    & medicamento_validade : NAT +-> NAT /*id -> validade*/
+    & estoque_i : NAT +-> NAT /*id -> qtd, qtd pode ser zero*/
+    & dom ( medicamento_nome ) = dom ( medicamento_lote )
+    & dom ( medicamento_lote ) = dom ( medicamento_validade )
+    & dom ( medicamento_validade ) = dom ( medicamento )
+    & ran ( medicamento_nome ) = dom ( dom ( ran ( medicamento ) ) )
+    & ran ( medicamento_lote ) = ran ( dom ( ran ( medicamento ) ) )
+    & ran ( medicamento_validade ) = ran ( ran ( medicamento ) )
     & wm : NAT /*wm = 0 qnd ta vazio*/
     & dia_i : NAT
     & dia_i = dia
-    /*TO DO: 
-    - ver comentarios sobre "dia" na .mch
-    - ver alteracao no verificar_vencidos na .mch
-    - ver se ainda precisa do dia e como utilizar na questao da validade
-    - talvez inicializar os array com lixo (?)
-    - add invariante de ligacao e outros predicados pra ligar a maq e o ref*/
+    & estoque_i = estoque
 
-    
-INITIALISATION medicamento_nome := {} 
-               ; medicamento_lote := {} 
+VALUES NOME = 500 .. 2000
+
+INITIALISATION medicamento_nome := {}
+               ; medicamento_lote := {}
                ; medicamento_validade := {}
                ; dia_i := 0
                ; estoque_i := {}
                ; wm := 0
-    
- OPERATIONS   
-    adicionar_medicamento(ID , nome, lote, validade) =
+
+ OPERATIONS
+    adicionar_medicamento ( ID , nome , lote , validade ) =
         BEGIN
-            medicamento_nome(wm) := nome;
-            medicamento_lote(wm) := lote;
-            medicamento_validade(wm) := validade; 
-            estoque_i(wm) := 0; 
+            medicamento_nome ( wm ) := nome ;
+            medicamento_lote ( wm ) := lote ;
+            medicamento_validade ( wm ) := validade ;
+            estoque_i ( wm ) := 0 ;
             wm := wm + 1
-        END;
-    
-    remover_medicamento(ID) = 
+        END ;
+
+    remover_medicamento ( ID ) =
         BEGIN
-            VAR mm, len IN
-                mm := ID + 1;
-                len := card(dom(medicamento_nome));
+            VAR mm , len IN
+                mm := ID + 1 ;
+                len := card ( dom ( medicamento_nome ) ) ;
                 WHILE mm < len DO
-                        medicamento_nome(mm - 1) := medicamento_nome(mm);
-                        medicamento_lote(mm - 1) := medicamento_lote(mm);
-                        medicamento_validade(mm - 1) := medicamento_validade(mm);
+                        medicamento_nome ( mm - 1 ) := medicamento_nome ( mm ) ;
+                        medicamento_lote ( mm - 1 ) := medicamento_lote ( mm ) ;
+                        medicamento_validade ( mm - 1 ) := medicamento_validade ( mm ) ;
                     mm := mm + 1
                     INVARIANT mm : NAT
-                    VARIANT (len - mm)
-                END;
+                    VARIANT ( len - mm )
+                END ;
                 wm := wm - 1
             END
-        END;
-    
-    incrementar_dia = dia_i := dia_i + 1;
+        END ;
 
-    hoje <-- consultar_dia = hoje := dia_i;
-    
-     vv <-- verificar_vencidos =
-         BEGIN
-             VAR mm, len IN
-                 mm := 0;
-                 len := card(dom(medicamento_nome));
-                 WHILE mm < len DO
-                     VAR val IN
-                         val := medicamento_validade(mm);
-                         IF (val < dia_i) THEN
-                             vv(wm) := mm ; wm := wm + 1
-                         END
-                     END;
-                     mm := mm + 1
-                     INVARIANT mm : NAT & !kk . (kk:0..(mm-1) => medicamento_validade(kk) < dia_i)
-                     VARIANT (len - mm)
-                 END
-              END
-         END
+    adicionar_estoque ( ID , qtd ) =
+        BEGIN
+            estoque_i ( ID ) := estoque_i ( ID ) + qtd
+        END ;
+
+    remover_estoque ( ID , qtd ) =
+        BEGIN
+            estoque_i ( ID ) := estoque_i ( ID ) - qtd
+        END ;
+
+    qtd <-- qtd_medicamento ( ID ) =
+        BEGIN
+            qtd := estoque_i ( ID )
+        END ;
+
+    oo <-- verificar_validade ( xx ) =
+        BEGIN
+            oo := max ( { 0 , min ( medicamento_validade [ { xx } ] ) - dia_i } )
+        END ;
+
+    incrementar_dia =
+        BEGIN
+          dia_i := dia_i + 1
+        END ;
+
+    hoje <-- consultar_dia =
+        BEGIN
+            hoje := dia_i
+        END
 END
