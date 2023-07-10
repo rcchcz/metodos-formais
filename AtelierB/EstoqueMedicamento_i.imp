@@ -1,43 +1,43 @@
-IMPLEMENTATION EstoqueMedicamento_i
+﻿IMPLEMENTATION EstoqueMedicamento_i
 
 REFINES EstoqueMedicamento
 
 CONCRETE_VARIABLES
     medicamento_nome , medicamento_lote , medicamento_validade , estoque_i , dia_i , wm
-    
+
 INVARIANT
-    medicamento_nome : (0..limit) --> NOME 
-    & medicamento_lote : (0..limit) --> NAT
-    & medicamento_validade : (0..limit) --> NAT
-    & estoque_i : (0..limit) --> NAT
+    medicamento_nome : ( 0 .. limit ) --> NOME
+    & medicamento_lote : ( 0 .. limit ) --> NAT
+    & medicamento_validade : ( 0 .. limit ) --> NAT
+    & estoque_i : ( 0 .. limit ) --> NAT
     //& dom ( medicamento_nome ) = dom ( medicamento )
     //& dom ( medicamento_lote ) = dom ( medicamento )
     //& dom ( medicamento_validade ) = dom ( medicamento )
     //& ran ( medicamento_nome ) = dom ( dom ( ran ( medicamento ) ) )
     //& ran ( medicamento_lote ) = ran ( dom ( ran ( medicamento ) ) )
     //& ran ( medicamento_validade ) = ran ( ran ( medicamento ) )
-    & wm : (0..limit)
+    & wm : ( 0 .. limit )
     & dia_i : NAT
     & dia_i = dia
     //& estoque_i = estoque
 
-VALUES NOME = 100 .. 299; limit = 500; empty = 100
+VALUES NOME = 100 .. 299 ; limit = 500 ; empty = 100
 
 
-INITIALISATION 
-    medicamento_nome := (0..limit)*{100};
-    medicamento_lote := (0..limit)*{0};
-    medicamento_validade := (0..limit)*{0}; 
-    dia_i := 0;
-    estoque_i :=  (0..limit) * {0};
+INITIALISATION
+    medicamento_nome := ( 0 .. limit ) * { 100 } ;
+    medicamento_lote := ( 0 .. limit ) * { 0 } ;
+    medicamento_validade := ( 0 .. limit ) * { 0 } ;
+    dia_i := 0 ;
+    estoque_i :=  ( 0 .. limit ) * { 0 } ;
     wm := 0
-                  
+
  OPERATIONS
-     
+
     adicionar_medicamento ( ID , nome , lote , validade ) =
         BEGIN
-            VAR yy IN yy := limit;
-            IF(wm < yy)
+            VAR yy IN yy := limit ;
+            IF ( wm < yy )
             THEN
                 medicamento_nome ( wm ) := nome ;
                 medicamento_lote ( wm ) := lote ;
@@ -53,11 +53,11 @@ INITIALISATION
             VAR mm IN
                 mm := ID + 1 ;
                 WHILE mm < wm DO
-                        medicamento_nome( mm - 1 ) := medicamento_nome( mm ) ;
-                        medicamento_lote( mm - 1 ) := medicamento_lote( mm ) ;
-                        medicamento_validade( mm - 1 ) := medicamento_validade( mm ) ;
+                        medicamento_nome ( mm - 1 ) := medicamento_nome ( mm ) ;
+                        medicamento_lote ( mm - 1 ) := medicamento_lote ( mm ) ;
+                        medicamento_validade ( mm - 1 ) := medicamento_validade ( mm ) ;
                     mm := mm + 1
-                    INVARIANT mm : (0..limit)
+                    INVARIANT mm : ( 0 .. limit )
                     VARIANT ( wm - mm )
                 END ;
                 wm := wm - 1
