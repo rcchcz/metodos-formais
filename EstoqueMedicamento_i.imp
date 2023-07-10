@@ -57,7 +57,7 @@ INITIALISATION
                         medicamento_lote( mm - 1 ) := medicamento_lote( mm ) ;
                         medicamento_validade( mm - 1 ) := medicamento_validade( mm ) ;
                     mm := mm + 1
-                    INVARIANT mm : (0..limit)
+                    INVARIANT mm : (0..limit) & !xx . ((xx : 0..(mm-1)) => (xx : dom((0..(mm-1)) <| medicamento_validade)) )
                     VARIANT ( wm - mm )
                 END ;
                 wm := wm - 1
